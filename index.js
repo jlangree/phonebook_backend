@@ -8,6 +8,7 @@ const app = express()
 
 // Middleware
 app.use(express.json())
+app.use(express.static('build'))
 app.use(cors())
 // morgan logger
 morgan.token( 'body', (req, res) =>
