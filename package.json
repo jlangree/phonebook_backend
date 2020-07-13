@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build:ui": "rm -rf build && cd ../../part2/phonebook && npm run build --prod && cp -r build ../../part3/phonebook_backend",
+    "deploy": "git push origin master",
+    "deploy:full": "npm run build:ui && git add --all && git commit -m uibuild && npm run deploy",
+    "logs:prod": "heroku logs --tail"
   },
   "keywords": [],
   "author": "",
