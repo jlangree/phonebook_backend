@@ -40,15 +40,8 @@ router.get('/api/persons/:id', async (req, res, next) => {
 })
 
 // post new resource
-router.post('/api/persons', async (req, res) => {
+router.post('/api/persons', async (req, res, next) => {
   const body = req.body
-  // validation - make sure name and number are not null; make sure name is not already saved
-  if (!body.name || !body.number) {
-    return res.status(400).json({error: 'missing name or number'})
-  }
-  // if ( persons.map(p => p.name).includes(body.name) ) {
-  //   return res.status(400).json({error: 'name must be unique'})
-  // }
   // save posted data as newContact object
   const newContact = new Person({
     name: body.name,
@@ -59,18 +52,22 @@ router.post('/api/persons', async (req, res) => {
     const savedContact = await newContact.save()
     res.json(savedContact)
   } catch (err) {
-    res.status(500).json({error: err.message})
+    next(err)
   }
 })
 
 // update resource
 router.put('/api/persons/:id', async (req, res) => {
-  const body = req.body
+  const { name, number } = req.body
+  const { id } = req.params
   // validation - make sure name and number are not null; make sure name is not already saved
-  if (!body.name || !body.number) {
+  if (!name || !number) {
     return res.status(400).json({error: 'missing name or number'})
   }
-  const updatedContact = await Person.findByIdAndUpdate(req.params.id, body)
+  const filter = { _id: id }  // find by id
+  const update = { name, number }  // new person object
+  const opts = { new: true, runValidators: true }  // options to run validators and return updated object instead of old one
+  const updatedContact = await Person.findOneAndUpdate(filter, update, opts)
   res.json(updatedContact)
 })
 
