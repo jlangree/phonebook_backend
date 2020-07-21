@@ -4,7 +4,7 @@ const cors = require('cors')
 const router = require('./router')
 
 // morgan logger
-morgan.token( 'body', (req, res) =>
+morgan.token( 'body', (req) =>
   req.method === 'POST' || 'PUT'
     ? JSON.stringify(req.body)
     : null

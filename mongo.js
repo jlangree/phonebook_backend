@@ -29,7 +29,7 @@ async function saveDocument(doc) {
   mongoose.connection.close()
 }
 
-// saveDocument(person)
+saveDocument(person)
 
 Person.find({}).then(result => {
   result.forEach(note => {

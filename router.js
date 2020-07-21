@@ -4,7 +4,7 @@ const Person = require('./models/person')
 const router = express.Router()
 
 // route to display info
-router.get('/info', async (req, res) => {
+router.get('/info', async (req, res, next) => {
   try {
     const persons = await Person.find({})
     const info = `The number of contacts in the phonebook is ${persons.length}.`
@@ -62,7 +62,7 @@ router.put('/api/persons/:id', async (req, res) => {
   const { id } = req.params
   // validation - make sure name and number are not null; make sure name is not already saved
   if (!name || !number) {
-    return res.status(400).json({error: 'missing name or number'})
+    return res.status(400).json({ error: 'missing name or number' })
   }
   const filter = { _id: id }  // find by id
   const update = { name, number }  // new person object
@@ -74,7 +74,7 @@ router.put('/api/persons/:id', async (req, res) => {
 // delete a resource by id
 router.delete('/api/persons/:id', async (req, res, next) => {
   try {
-    const result = await Person.findByIdAndRemove(req.params.id)
+    await Person.findByIdAndRemove(req.params.id)
     res.status(204).end()
   } catch (err) {
     next(err)
